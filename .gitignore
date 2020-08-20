@@ -1,0 +1,18 @@
+# local
+env/
+venv/
+local.*
+
+staticfiles/
+__pycache__/
+
+*.pyc
+*.key
+
+
+#database
+db.sqlite3
+
+
+#editors
+.vscode
