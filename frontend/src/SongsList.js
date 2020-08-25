@@ -58,8 +58,8 @@ class SongsList extends React.Component {
               <td>{new Date(song.updated).toLocaleString()}</td>
               <td>{song.link}</td>
               <td>
-                <button className="btn btn-danger mr-1" onClick={(e)=> this.handleDelete(e, song.id) }>Delete</button>
-                <a className="btn btn-success" href={"/songs/" + song.id}>Update</a>
+                <a className="btn btn-info mr-1" href={"/songs/" + song.id}>Update</a>
+                <button className="btn btn-danger" onClick={(e)=> this.handleDelete(e, song.id) }>Delete</button>
               </td>
             </tr>)}
           </tbody>
