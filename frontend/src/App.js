@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom'
 import { Route  } from 'react-router-dom'
-import SongsList from './SongsList'
-import SongCreateUpdate from './SongCreateUpdate'
+import SongsList from './songs/SongsList'
+import SongCreateUpdate from './songs/SongCreateUpdate'
 import './App.css';
 
 const BaseLayout = () => (
