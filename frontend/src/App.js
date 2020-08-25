@@ -1,50 +1,39 @@
-import React from 'react';
-import axios from 'axios';
+import React, { Component } from 'react';
+import { BrowserRouter } from 'react-router-dom'
+import { Route  } from 'react-router-dom'
+import SongsList from './SongsList'
+import SongCreateUpdate from './SongCreateUpdate'
 import './App.css';
 
+const BaseLayout = () => (
+  <div className="container-fluid">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <a className="navbar-brand" href="/">Django React Test</a>
+      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span className="navbar-toggler-icon"></span>
+    </button>
+    <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div className="navbar-nav">
+        <a className="nav-item nav-link" href="/">Songs</a>
+        <a className="nav-item nav-link" href="/songs">Create Song</a>
+      </div>
+    </div>
+    </nav>
+    <div className="content">
+      <Route path="/" exact component={SongsList} />
+      <Route path="/songs/:id" component={SongCreateUpdate} />
+      <Route path="/songs/" exact component={SongCreateUpdate} />
+    </div>
+  </div>
+)
 
-const API_URL = 'http://localhost:8000';
-
-
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      songs: [],
-    }
-    this.getSongs = this.getSongs.bind(this);
-  }
-
-  getSongs() {
-    const url = `${API_URL}/api/songs/`;
-    return axios.get(url).then(response => response.data);
-  }
-
-  componentDidMount() {
-    var  self  =  this;
-    this.getSongs().then(function (result) {
-      self.setState({ songs: result})
-    });
-  }
-
+class App extends Component {
   render() {
     return (
-      <div>
-        <h1>Songs</h1>
-        <div>
-          {this.state.songs.map( song =>
-            <ul>
-              <strong>{song.title}</strong>
-              <li>Id: {song.id}</li>
-              <li>Owner: {song.owner}</li>
-              <li>Created: {song.created}</li>
-              <li>Updated: {song.updated}</li>
-              <li>Link: {song.link}</li>
-            </ul>
-          )}
-        </div>
-      </div>
-    )
+    <BrowserRouter>
+      <BaseLayout/>
+    </BrowserRouter>
+    );
   }
 }
 
