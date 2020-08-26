@@ -1,4 +1,5 @@
 import axios from 'axios';
+import axiosInstance from '.././auth/AuthServices'
 
 const API_URL = 'http://localhost:8000/api';
 
@@ -15,16 +16,16 @@ export default class SongsService {
 
   createSong(song){
     const url = `${API_URL}/songs/`;
-    return axios.post(url, song);
+    return axiosInstance.post(url, song);
   }
 
   deleteSong(song){
     const url = `${API_URL}/songs/${song.id}`;
-    return axios.delete(url);
+    return axiosInstance.delete(url);
   }
 
   updateSong(song){
     const url = `${API_URL}/songs/${song.id}/`;
-    return axios.put(url, song);
+    return axiosInstance.put(url, song);
   }
 }
