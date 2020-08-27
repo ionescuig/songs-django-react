@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { BrowserRouter , Switch} from 'react-router-dom'
 import { Route  } from 'react-router-dom'
-import Login from './auth/Login'
-import Signup from './auth/Signup'
-import SongsList from './songs/SongsList'
-import SongCreateUpdate from './songs/SongCreateUpdate'
+import Login from '../auth/Login'
+import Signup from '../auth/Signup'
+import SongsList from '../songs/SongsList'
+import SongCreateUpdate from '../songs/SongCreateUpdate'
 import './App.css';
-import axiosInstance from "./auth/AuthServices";
+import axiosInstance from "../auth/AuthServices";
 
 
 class NavLayout extends React.Component {

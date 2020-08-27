@@ -1,5 +1,4 @@
 import React from 'react';
-import '.././App.css';
 import SongsService from  './SongsServices';
 import {alertMsg} from './messages';
 
