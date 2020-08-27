@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import axiosInstance from "./AuthServices";
 
 
@@ -29,7 +29,6 @@ class Login extends Component {
         localStorage.setItem('access_token', res.data.access);
         localStorage.setItem('refresh_token', res.data.refresh);
         this.setState({loggedin: true})
-        // this.props.history.push("/");
       })
       return response;
     } catch (error) {
@@ -40,6 +39,8 @@ class Login extends Component {
   render() {
     const loggedin = this.state.loggedin
     if (loggedin) {
+      let username = localStorage.getItem("username")
+      this.props.onUserChange(username)
       return (
         <Redirect to="/" />
       )
@@ -53,10 +54,20 @@ class Login extends Component {
             <form onSubmit={this.handleSubmit}>
             <div className="form-group">
               <label>Username:</label>
-              <input className="form-control" name="username" type="text" value={this.state.username} onChange={this.handleChange} />
+              <input
+                className="form-control"
+                name="username"
+                type="text"
+                value={this.state.username}
+                onChange={this.handleChange} />
 
               <label className="mt-3">Password:</label>
-              <input className="form-control" name="password" type="password" value={this.state.password} onChange={this.handleChange}/>
+              <input
+                className="form-control"
+                name="password"
+                type="password"
+                value={this.state.password}
+                onChange={this.handleChange}/>
               
               <input className="btn btn-primary mt-3" type="submit" value="Submit" />
               </div>
