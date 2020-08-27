@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import { Redirect, Route } from "react-router-dom";
 import axiosInstance from "./AuthServices";
-// import axiosInstance from './AuthServices'
+
 
 class Login extends Component {
   constructor(props) {
       super(props);
-      this.state = {username: "", password: ""};
+      this.state = {username: "", password: "", loggedin: false};
 
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,8 +25,11 @@ class Login extends Component {
       });
       response.then(res => {
         axiosInstance.defaults.headers['Authorization'] = "Bearer " + res.data.access;
+        localStorage.setItem('username', this.state.username);
         localStorage.setItem('access_token', res.data.access);
         localStorage.setItem('refresh_token', res.data.refresh);
+        this.setState({loggedin: true})
+        // this.props.history.push("/");
       })
       return response;
     } catch (error) {
@@ -34,10 +38,17 @@ class Login extends Component {
   }
 
   render() {
+    const loggedin = this.state.loggedin
+    if (loggedin) {
+      return (
+        <Redirect to="/" />
+      )
+    }
+
     return (
       <div>
         <div className="row">
-          <div className="col-md-2 offset-sm-5">
+          <div className="col-md-2 offset-md-5">
           <h2 className="mt-5 mb-5">Login Page</h2>
             <form onSubmit={this.handleSubmit}>
             <div className="form-group">
