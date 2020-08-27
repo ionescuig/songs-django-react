@@ -26,7 +26,7 @@ class Signup extends Component{
     return (
       <div>
         <div className="row">
-          <div className="col-md-2 offset-sm-5">
+          <div className="col-md-2 offset-md-5">
           <h2 className="mt-5 mb-5">Signup Page</h2>
             <form onSubmit={this.handleSubmit}>
             <div className="form-group">
