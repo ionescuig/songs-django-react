@@ -129,6 +129,7 @@ CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:3000",
+    "http://localhost:3000",
 ]
 
 REST_FRAMEWORK = {
@@ -154,7 +155,7 @@ REST_FRAMEWORK = {
 # }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
