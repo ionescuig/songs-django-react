@@ -1,24 +1,20 @@
 import React from 'react';
-import SongsService from  './SongsServices';
+import { connect } from 'react-redux';
+import * as actions from '../../store/actions/songs';
+import SongsService from  '../../store/SongsServices';
 import {alertMsg} from './messages';
 
 const  songsService  =  new SongsService();
 
 
 class SongsList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      songs: [],
-    }
+  constructor() {
+    super();
     this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
-    let self = this;
-    songsService.getSongs().then(function (result) {
-      if (result) self.setState({ songs: result});
-    });
+    this.props.updateSongs();
   }
 
   handleDelete(e, id) {
@@ -49,19 +45,29 @@ class SongsList extends React.Component {
             </tr>
             </thead>
             <tbody>
-              {this.state.songs.map( song  =>
-              <tr key={song.id}>
-                <td>{song.title}</td>
-                <td>{song.link}</td>
-                <td>{new Date(song.created).toLocaleString()}</td>
-                <td>{new Date(song.updated).toLocaleString()}</td>
-                <td>{song.id}</td>
-                <td>{song.owner}</td>
-                <td>
-                  <a className="btn btn-info mr-2 my-1 up-del" href={"/songs/" + song.id}>Update</a>
-                  <button className="btn btn-danger my-1 up-del" onClick={(e)=> this.handleDelete(e, song.id) }>Delete</button>
-                </td>
-              </tr>)}
+              {
+                this.props.songs
+
+                ?
+
+                this.props.songs.map( song  =>
+                <tr key={song.id}>
+                  <td>{song.title}</td>
+                  <td>{song.link}</td>
+                  <td>{new Date(song.created).toLocaleString()}</td>
+                  <td>{new Date(song.updated).toLocaleString()}</td>
+                  <td>{song.id}</td>
+                  <td>{song.owner}</td>
+                  <td>
+                    <a className="btn btn-info mr-2 my-1 up-del" href={"/songs/" + song.id}>Update</a>
+                    <button className="btn btn-danger my-1 up-del" onClick={(e)=> this.handleDelete(e, song.id) }>Delete</button>
+                  </td>
+                </tr>)
+
+                :
+
+                null
+              }
             </tbody>
           </table>
         </div>
@@ -70,4 +76,18 @@ class SongsList extends React.Component {
   }
 }
 
-export default SongsList;
+const mapStateToProps = state => {
+  return {
+    songs: state.songs.songs,
+    error: state.songs.error,
+    loading: state.songs.loading
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateSongs: () => dispatch(actions.updateSongs())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SongsList);

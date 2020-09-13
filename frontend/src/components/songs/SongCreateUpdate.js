@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import SongsService from './SongsServices';
+import SongsService from '../../store/SongsServices';
 
 const songService = new SongsService();
 
 class SongCreateUpdate extends Component {
-    constructor(props) {
-      super(props);
+    constructor() {
+      super();
       this.handleSubmit = this.handleSubmit.bind(this);
     }
     

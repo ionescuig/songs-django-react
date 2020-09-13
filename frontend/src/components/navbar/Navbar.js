@@ -1,35 +1,10 @@
 import React from 'react';
-import axiosInstance from "../auth/AuthServices";
-import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../store/actions/auth';
 
 class Navbar extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {logout: false}
-    this.resetStateOnLogout = this.resetStateOnLogout.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
-  }
-
-  resetStateOnLogout() {
-    this.setState({logout: false})
-  }
-
-  handleLogout() {
-    let user = "";
-    this.props.onUserChange(user)
-    localStorage.removeItem('username');
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    axiosInstance.defaults.headers['Authorization'] = null;
-    this.setState({logout: true})
-  }
 
   render() {
-    let logout = this.state.logout
-    if(logout) {
-      this.resetStateOnLogout()
-      return <Redirect to="/"/>
-    }
 
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -49,7 +24,7 @@ class Navbar extends React.Component {
           {(() => {if (this.props.username) return (
               <div className="form-inline my-2 my-lg-0">
                 <span className="navbar-text text-dark">Welcome <strong>{this.props.username}</strong></span>
-                <a className="nav-link" onClick={this.handleLogout} href="/">Logout</a>
+                <a className="nav-link" href="/" onClick={this.props.logout}>Logout</a>
               </div>
             );
             else return (
@@ -64,4 +39,20 @@ class Navbar extends React.Component {
   }
 }
 
-export default Navbar;
+const mapStateToProps = state => {
+  return {
+    username: state.auth.username,
+    loading: state.auth.loading,
+    error: state.auth.error
+  }
+
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(actions.authLogout())
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
