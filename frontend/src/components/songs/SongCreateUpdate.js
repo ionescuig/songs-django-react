@@ -1,82 +1,95 @@
 import React, { Component } from 'react';
-import SongsService from '../../store/SongsServices';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../store/actions/songs';
 
-const songService = new SongsService();
 
 class SongCreateUpdate extends Component {
     constructor() {
       super();
+      this.state = {
+        title: "",
+        link: "",
+        id: "",
+        owner: "",
+        submit: false
+
+      }
+      this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
     }
     
     componentDidMount(){
       const { match: { params } } = this.props;
-      if(params && params.id)
-      {
-        songService.getSong(params.id).then((song)=>{
-          this.refs.title.value = song.title;
-          this.refs.link.value = song.link;
-        })
+      if(params && params.id) {
+        let song = this.props.songs.find(s => s.id.toString() === params.id);
+
+        if(song) {
+          this.setState({
+            title: song.title,
+            link: song.link,
+            id: song.id,
+            owner: song.owner
+          })
+        }
       }
     }
 
-    handleCreate(){
-      songService.createSong(
-        {
-          "title": this.refs.title.value,
-          "link": this.refs.link.value,
-          "owner": "gabriel"
-      }
-      ).then((result)=>{
-        alert("Song created!");
-      }).catch(()=>{
-        alert('There was an error! Please re-check your form.');
-      });
-    }
+    handleChange(event) {
+      const name = event.target.name;
+      const value = event.target.value;
+      this.setState({[name]: value})
 
-    handleUpdate(id){
-      songService.updateSong(
-        {
-          "id": id,
-          "title": this.refs.title.value,
-          "link": this.refs.link.value,
-      }
-      ).then((result)=>{
-        alert("Song updated!");
-      }).catch(()=>{
-        alert('There was an error! Please re-check your form.');
-      });
     }
 
     handleSubmit(event) {
-      const { match: { params } } = this.props;
-
-      if(params && params.id){
-        this.handleUpdate(params.id);
-      }
-      else
-      {
-        this.handleCreate();
-      }
-
       event.preventDefault();
+      this.props.createUpdateSong(this.state);
+
+      if (!this.state.owner) this.setState({submit: true})
+      else if (this.state.owner === localStorage.getItem("username")) this.setState({submit: true})
     }
 
     render() {
+      let errorMessage = null;
+      if (this.props.error) {
+        errorMessage = (
+          <p>{this.props.error.message}</p>
+        )
+      }
+      let submit = this.state.submit;
+      if (submit) return <Redirect to='/' />
+
       return (
         <form onSubmit={this.handleSubmit}>
-        <div className="form-group">
-          <label>Title:</label>
-          <input className="form-control" type="text" ref='title' />
+          <div className="form-group">
+            <label>Title:</label>
+            <input className="form-control" type="text" name='title' onChange={this.handleChange} value={this.state.title} />
 
-          <label>Link:</label>
-          <input className="form-control" type="url" ref='link'/>
-          
-          <input className="btn btn-primary" type="submit" value="Submit" />
+            <br/>
+            <label>Link:</label>
+            <input className="form-control" type="url" name='link' onChange={this.handleChange} value={this.state.link} />
+            
+            <br />
+            <input className="btn btn-primary" type="submit" value="Submit" />
           </div>
+          <br />{errorMessage}
         </form>
       );
     }
 }
 
-export default SongCreateUpdate;
+const mapStateToProps = state => {
+  return {
+    songs: state.songs.songs,
+    error: state.songs.error
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createUpdateSong: (title, link, id, owner) => dispatch(actions.createUpdateSong(title, link, id, owner))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SongCreateUpdate);

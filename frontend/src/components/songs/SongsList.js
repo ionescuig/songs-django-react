@@ -1,30 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/songs';
-import SongsService from  '../../store/SongsServices';
-import {alertMsg} from './messages';
-
-const  songsService  =  new SongsService();
-
 
 class SongsList extends React.Component {
   constructor() {
     super();
+    this.state = {
+      songs: null
+    }
     this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
     this.props.updateSongs();
+    this.setState({songs: this.props.songs})
   }
 
-  handleDelete(e, id) {
-    let self = this;
-    songsService.deleteSong({id: id}).then(() => {
-      let newArr = self.state.songs.filter(obj => {
-        return obj.id !== id;
-      });
-      self.setState({songs:  newArr})
-    }).catch(err => alert(alertMsg(err, 'delete')))
+  handleDelete(song) {
+    this.props.deleteSong(song);
   }
 
   render() {
@@ -58,10 +51,21 @@ class SongsList extends React.Component {
                   <td>{new Date(song.updated).toLocaleString()}</td>
                   <td>{song.id}</td>
                   <td>{song.owner}</td>
-                  <td>
+                  {
+                    song.owner === localStorage.getItem("username")
+
+                    ?
+
+                    <td>
                     <a className="btn btn-info mr-2 my-1 up-del" href={"/songs/" + song.id}>Update</a>
-                    <button className="btn btn-danger my-1 up-del" onClick={(e)=> this.handleDelete(e, song.id) }>Delete</button>
-                  </td>
+                    <button className="btn btn-danger my-1 up-del" onClick={() => this.handleDelete(song)}>Delete</button>
+                    </td>
+
+                    :
+                    <td></td>
+
+                  }
+                    
                 </tr>)
 
                 :
@@ -84,9 +88,10 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    updateSongs: () => dispatch(actions.updateSongs())
+    updateSongs: () => dispatch(actions.retrieveSongs()),
+    deleteSong: (title, link, id, owner) => dispatch(actions.deleteSong(title, link, id, owner))
   }
 }
 
