@@ -27,13 +27,15 @@ class Login extends React.Component {
       <div className="row">
         <div className="col-md-2 offset-md-5">
           <h2 className="mt-5 mb-5">Login Page</h2>
-          
+
           {errorMessage}
 
           {
             this.props.loading
 
-            ? <h3><em>Loading</em></h3>
+            ?
+            <i className="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+
             
             :
 
