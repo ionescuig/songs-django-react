@@ -71,6 +71,7 @@ const createSongStart = (state, action) => {
 const createSongSuccess = (state, action) => {
   let updatedSongs = state.songs.filter((item) => item.id !== action.song.id);
   updatedSongs = updatedSongs.concat(action.song);
+  updatedSongs.sort((a, b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
   return updateObject(state, {
     songs: updatedSongs,
     song: null,

@@ -1,5 +1,35 @@
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    overflow: hidden;
+    z-index: 1;
+}
+
+th {
+    background-color: #eee;
+}
+
 td {
-    /* height: 50px; */
-    /* vertical-align: middle; */
     line-height: 45px;
+}
+
+td, th {
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+}
+
+th:hover::after, td:hover::after { 
+    background-color: #eee;
+    content: '\00a0';
+    height: 10000px;
+    left: 0;
+    position: absolute;
+    top: -5000px;
+    width: 100%;
+    z-index: -1;
+}
+
+.btn-link:hover {
+    color: #33fefd;
 }

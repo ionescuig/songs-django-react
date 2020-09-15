@@ -6,9 +6,12 @@ class SongsList extends React.Component {
   constructor() {
     super();
     this.state = {
-      songs: null
+      songs: null,
+      property: null,
+      order: true,
     }
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleSort = this.handleSort.bind(this);
   }
 
   componentDidMount() {
@@ -20,7 +23,43 @@ class SongsList extends React.Component {
     this.props.deleteSong(song);
   }
 
+  handleSort(property) {
+    // update order
+    let order = this.state.order;
+    let stateProperty = this.state.property;
+    if (stateProperty && property === stateProperty) order = !order;
+    else order = true;
+
+    //sort songs
+    let songs = this.state.songs
+
+    switch (property) {
+      case "id":
+        if (order) songs.sort((a, b) => a.id - b.id);
+        else songs.sort((a, b) => b.id - a.id);
+        break;
+      case "title":
+      case "link":
+      case "created":
+      case "updated":
+      case "owner":
+        if (order) songs.sort((a, b) => (a[property] > b[property]) ? 1 : ((b[property] > a[property]) ? -1 : 0));
+        else songs.sort((a, b) => (b[property] > a[property]) ? 1 : ((a[property] > b[property]) ? -1 : 0));
+        break;
+      default:
+        break;
+    }
+
+    this.setState({
+      songs: songs,
+      property: property,
+      order: order,
+    });
+  }
+
   render() {
+    let songs = this.state.songs
+
     return (
       <div className="col-md-10 offset-md-1">
         <h1>Songs</h1>
@@ -28,22 +67,43 @@ class SongsList extends React.Component {
           <table className="table table-sm table-hover">
             <thead key="thead">
             <tr>
-              <th>Title</th>
-              <th>Link</th>
-              <th>Created</th>
-              <th>Updated</th>
-              <th>ID</th>
-              <th>Owner</th>
-              <th>Options</th>
+              <th>
+                Title
+                <button className="btn btn-link ml-1" onClick={() => this.handleSort("title")}><i className="fa fa-sort m-2"></i></button>
+              </th>
+              <th onClick={() => this.handleSort("link")}>
+                Link
+                <button className="btn btn-link ml-2"><i className="fa fa-sort m-1"></i></button>
+              </th>
+              <th onClick={() => this.handleSort("created")}>
+                Created
+                <button className="btn btn-link ml-2"><i className="fa fa-sort m-1"></i></button>
+              </th>
+              <th onClick={() => this.handleSort("updated")}>
+                Updated
+                <button className="btn btn-link ml-2"><i className="fa fa-sort m-1"></i></button>
+              </th>
+              <th onClick={() => this.handleSort("id")}>
+                ID
+                <button className="btn btn-link ml-2"><i className="fa fa-sort m-1"></i></button>
+              </th>
+              <th onClick={() => this.handleSort("owner")}>
+                Owner
+                <button className="btn btn-link ml-2"><i className="fa fa-sort m-1"></i></button>
+              </th>
+              <th>
+                Options
+                <button className="btn btn-link ml-2"><i className="fa fa-sort-empty m-1"></i></button>
+              </th>
             </tr>
             </thead>
             <tbody>
               {
-                this.props.songs
+                songs
 
                 ?
 
-                this.props.songs.map( song  =>
+                songs.map( song  =>
                 <tr key={song.id}>
                   <td>{song.title}</td>
                   <td>{song.link}</td>
