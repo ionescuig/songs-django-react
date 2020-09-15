@@ -5,7 +5,6 @@ const initialState = {
   songs: [],
   song: null,
   error: null,
-  loading: false, 
   action: null
 }
 
@@ -14,7 +13,7 @@ const fetchSongsStart = (state, action) => {
   return updateObject(state, {
     song: null,
     error: null,
-    loading: true
+    action: null
   })
 }
 
@@ -22,14 +21,12 @@ const fetchSongsSuccess = (state, action) => {
   return updateObject(state, {
     songs: action.songs,
     error: null,
-    loading: false
   })
 }
 
 const fetchSongsFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
-    loading: false
   })
 }
 
@@ -38,7 +35,6 @@ const fetchSongsFail = (state, action) => {
 const updateSongStart = (state, action) => {
   return updateObject(state, {
     error: null,
-    loading: true,
     song: action.song, 
     action: action.type
   })
@@ -51,7 +47,6 @@ const updateSongSuccess = (state, action) => {
     songs: updatedSongs,
     song: null,
     error: null,
-    loading: false,
     action: null
   })
 }
@@ -59,7 +54,6 @@ const updateSongSuccess = (state, action) => {
 const updateSongFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
-    loading: false,
     action: null
   })
 }
@@ -69,8 +63,8 @@ const updateSongFail = (state, action) => {
 const createSongStart = (state, action) => {
   return updateObject(state, {
     error: null,
-    loading: true,
-    song: action.song
+    song: action.song,
+    action: action.type
   })
 }
 
@@ -81,14 +75,14 @@ const createSongSuccess = (state, action) => {
     songs: updatedSongs,
     song: null,
     error: null,
-    loading: false
+    action: null
   })
 }
 
 const createSongFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
-    loading: false
+    action: null
   })
 }
 
@@ -97,7 +91,6 @@ const createSongFail = (state, action) => {
 const deleteSongStart = (state, action) => {
   return updateObject(state, {
     error: null,
-    loading: true,
     song: action.song
   })
 }
@@ -108,14 +101,12 @@ const deleteSongSuccess = (state, action) => {
     songs: updatedSongs,
     song: null,
     error: null,
-    loading: false
   })
 }
 
 const deleteSongFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
-    loading: false
   })
 }
 

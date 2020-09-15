@@ -84,7 +84,6 @@ const mapStateToProps = state => {
   return {
     songs: state.songs.songs,
     error: state.songs.error,
-    loading: state.songs.loading
   }
 }
 
