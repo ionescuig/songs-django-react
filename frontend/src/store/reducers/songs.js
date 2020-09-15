@@ -5,7 +5,8 @@ const initialState = {
   songs: [],
   song: null,
   error: null,
-  loading: false
+  loading: false, 
+  action: null
 }
 
 // fetch songs from api
@@ -38,7 +39,8 @@ const updateSongStart = (state, action) => {
   return updateObject(state, {
     error: null,
     loading: true,
-    song: action.song
+    song: action.song, 
+    action: action.type
   })
 }
 
@@ -49,14 +51,16 @@ const updateSongSuccess = (state, action) => {
     songs: updatedSongs,
     song: null,
     error: null,
-    loading: false
+    loading: false,
+    action: null
   })
 }
 
 const updateSongFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
-    loading: false
+    loading: false,
+    action: null
   })
 }
 

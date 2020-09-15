@@ -87,14 +87,14 @@ export const createSongFail = error => {
   }
 }
 
-export const createUpdateSong = ({title, link, id, owner}) => {
+export const createUpdateSong = ({title, link, id, owner}, history) => {
   return dispatch => {
     
     if (owner){
       dispatch(updateSongStart({id, title, link}));
       songsService.updateSong({id, title, link})
       .then( res => {
-        dispatch(updateSongSuccess(res.data));
+        dispatch(updateSongSuccess(res.data))
       })
       .catch( err => {
         dispatch(updateSongFail(err))

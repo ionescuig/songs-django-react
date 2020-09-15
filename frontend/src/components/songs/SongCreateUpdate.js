@@ -58,17 +58,17 @@ class SongCreateUpdate extends Component {
         )
       }
       let submit = this.state.submit;
-      if (submit) return <Redirect to='/' />
+      if (submit && !this.props.action) return <Redirect to='/' />
 
       return (
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label>Title:</label>
-            <input className="form-control" type="text" name='title' onChange={this.handleChange} value={this.state.title} />
+            <input className="form-control" type="text" name='title' onChange={this.handleChange} value={this.state.title} required />
 
             <br/>
             <label>Link:</label>
-            <input className="form-control" type="url" name='link' onChange={this.handleChange} value={this.state.link} />
+            <input className="form-control" type="url" name='link' onChange={this.handleChange} value={this.state.link} required />
             
             <br />
             <input className="btn btn-primary" type="submit" value="Submit" />
@@ -82,13 +82,14 @@ class SongCreateUpdate extends Component {
 const mapStateToProps = state => {
   return {
     songs: state.songs.songs,
-    error: state.songs.error
+    error: state.songs.error,
+    action: state.songs.action
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createUpdateSong: (title, link, id, owner) => dispatch(actions.createUpdateSong(title, link, id, owner))
+    createUpdateSong: ({title, link, id, owner}) => dispatch(actions.createUpdateSong({title, link, id, owner}))
   }
 }
 
