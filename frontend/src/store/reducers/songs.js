@@ -31,6 +31,36 @@ const fetchSongsFail = (state, action) => {
 }
 
 
+// sort songs
+const sortSongs = (state, action) => {
+  let property = action.property;
+  let order = localStorage.getItem("order");
+  order = (order === 'true');     // transform `order` from string to boolean
+  let sortedSongs = state.songs;
+
+  switch (property) {
+    case "id":
+      if (order) sortedSongs.sort((a, b) => a.id - b.id);
+      else sortedSongs.sort((a, b) => b.id - a.id);
+      break;
+    case "title":
+    case "link":
+    case "created":
+    case "updated":
+    case "owner":
+      if (order) sortedSongs.sort((a, b) => (a[property] > b[property]) ? 1 : ((b[property] > a[property]) ? -1 : 0));
+      else sortedSongs.sort((a, b) => (b[property] > a[property]) ? 1 : ((a[property] > b[property]) ? -1 : 0));
+      break;
+    default:
+      break;
+  }
+
+  return updateObject(state, {
+    songs: sortedSongs,
+  })
+}
+
+
 // update song
 const updateSongStart = (state, action) => {
   return updateObject(state, {
@@ -92,7 +122,8 @@ const createSongFail = (state, action) => {
 const deleteSongStart = (state, action) => {
   return updateObject(state, {
     error: null,
-    song: action.song
+    song: action.song,
+    action: action.type
   })
 }
 
@@ -102,12 +133,15 @@ const deleteSongSuccess = (state, action) => {
     songs: updatedSongs,
     song: null,
     error: null,
+    action: null,
   })
 }
 
 const deleteSongFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
+    song: null,
+    action: null,
   })
 }
 
@@ -118,6 +152,8 @@ const songsReducer = (state=initialState, action) => {
     case actionTypes.FETCH_SONGS_SUCCESS: return fetchSongsSuccess(state, action);
     case actionTypes.FETCH_SONGS_FAIL: return fetchSongsFail(state, action);
 
+    case actionTypes.SORT_SONGS: return sortSongs(state, action);
+    
     case actionTypes.UPDATE_SONG_START: return updateSongStart(state, action);
     case actionTypes.UPDATE_SONG_SUCCESS: return updateSongSuccess(state, action);
     case actionTypes.UPDATE_SONG_FAIL: return updateSongFail(state, action);

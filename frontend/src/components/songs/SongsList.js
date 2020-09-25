@@ -7,8 +7,6 @@ class SongsList extends React.Component {
     super();
     this.state = {
       songs: null,
-      property: null,
-      order: true,
     }
     this.handleDelete = this.handleDelete.bind(this);
     this.handleSort = this.handleSort.bind(this);
@@ -16,7 +14,7 @@ class SongsList extends React.Component {
 
   componentDidMount() {
     this.props.updateSongs();
-    this.setState({songs: this.props.songs})
+    this.setState({songs: this.props.songs});
   }
 
   handleDelete(song) {
@@ -25,43 +23,36 @@ class SongsList extends React.Component {
 
   handleSort(property) {
     // update order
-    let order = this.state.order;
-    let stateProperty = this.state.property;
-    if (stateProperty && property === stateProperty) order = !order;
+    let order = localStorage.getItem("order") || 'true';    // get value from localStorage (saved as string)
+    order = (order === 'true');                             // transform `order` from string to boolean
+    let oldProperty = localStorage.getItem("property", property) || null;
+
+    if (oldProperty) {
+      if (property === oldProperty) order = !order;
+      else order = true;
+    }
     else order = true;
 
-    //sort songs
-    let songs = this.state.songs
+    localStorage.setItem("order", order);
+    localStorage.setItem("property", property);
 
-    switch (property) {
-      case "id":
-        if (order) songs.sort((a, b) => a.id - b.id);
-        else songs.sort((a, b) => b.id - a.id);
-        break;
-      case "title":
-      case "link":
-      case "created":
-      case "updated":
-      case "owner":
-        if (order) songs.sort((a, b) => (a[property] > b[property]) ? 1 : ((b[property] > a[property]) ? -1 : 0));
-        else songs.sort((a, b) => (b[property] > a[property]) ? 1 : ((a[property] > b[property]) ? -1 : 0));
-        break;
-      default:
-        break;
-    }
-
-    this.setState({
-      songs: songs,
-      property: property,
-      order: order,
-    });
+    this.props.sortSongs(property);  // NO LOGIC YET IN REDUCER
+    this.setState({songs: this.props.songs});
   }
 
   render() {
-    let songs = this.state.songs
-
     return (
       <div className="col-md-10 offset-md-1">
+
+        {/* Errors */}
+        <div  style={{color: "red", margin: 40}}>
+          <p><em>* Create <strong>About</strong> page.</em></p>
+          <p><em>* Not geting songs list if anonymous user - check api.</em></p>
+          <p><small>Solved: Not updating on delete. Maybe because renders from state instead of props.</small></p>
+          <p><small>Solved: Not sorting. Maybe because can't modify props.  Maybe send as dispatch and modify in actions/reducers.</small></p>
+        </div>
+
+
         <h1>Songs</h1>
         <div>
           <table className="table table-sm table-hover">
@@ -99,11 +90,11 @@ class SongsList extends React.Component {
             </thead>
             <tbody>
               {
-                songs
+                this.props.songs
 
                 ?
 
-                songs.map( song  =>
+                this.props.songs.map( song  =>
                 <tr key={song.id}>
                   <td>{song.title}</td>
                   <td>{song.link}</td>
@@ -150,7 +141,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateSongs: () => dispatch(actions.retrieveSongs()),
-    deleteSong: (title, link, id, owner) => dispatch(actions.deleteSong(title, link, id, owner))
+    deleteSong: (title, link, id, owner) => dispatch(actions.deleteSong(title, link, id, owner)),
+    sortSongs: (property) => dispatch(actions.sortSongs(property))
   }
 }
 

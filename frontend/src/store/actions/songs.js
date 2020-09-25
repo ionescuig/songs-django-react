@@ -149,3 +149,24 @@ export const deleteSong = ({title, link, id, owner}) => {
     })
   }
 }
+
+
+// ==================== WORK IN PROGRESS ====================
+
+// sort songs
+export const sortSongs = (property) => {
+  return {
+    type: actionTypes.SORT_SONGS,
+    property: property,
+  }
+}
+
+// export const handleSortSongs = (property, order) => {
+//   return dispatch => {
+//     let sortedSongs = [];
+    
+//     dispatch(sortSongs(sortedSongs));
+//   }
+// }
+
+// ==========================================================
