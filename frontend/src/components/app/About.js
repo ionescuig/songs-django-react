@@ -25,6 +25,8 @@ class AboutPage extends React.Component {
 
 
           <div className="col-md-4" style={{color: "red"}}>
+            <h2 style={{marginBottom: 40}}>Tasks  </h2>
+
             <div>
               To Do:
               <ul>
