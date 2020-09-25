@@ -45,13 +45,15 @@ class Login extends React.Component {
                 <input
                   className="form-control"
                   name="username"
-                  type="text"/>
+                  type="text"
+                  required />
 
                 <label className="mt-3">Password:</label>
                 <input
                   className="form-control"
                   name="password"
-                  type="password"/>
+                  type="password"
+                  required />
                 
                 <input className="btn btn-primary mt-3" type="submit" value="Submit" />
               </div>
