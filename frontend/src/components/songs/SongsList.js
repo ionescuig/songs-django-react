@@ -43,16 +43,6 @@ class SongsList extends React.Component {
   render() {
     return (
       <div className="col-md-10 offset-md-1">
-
-        {/* Errors */}
-        <div  style={{color: "red", margin: 40}}>
-          <p><em>* Create <strong>About</strong> page.</em></p>
-          <p><em>* Not geting songs list if anonymous user - check api.</em></p>
-          <p><small>Solved: Not updating on delete. Maybe because renders from state instead of props.</small></p>
-          <p><small>Solved: Not sorting. Maybe because can't modify props.  Maybe send as dispatch and modify in actions/reducers.</small></p>
-        </div>
-
-
         <h1>Songs</h1>
         <div>
           <table className="table table-sm table-hover">

@@ -19,6 +19,9 @@ class Navbar extends React.Component {
                 <li className="nav-item">
                   <a className="nav-link" href="/songs">Create Song</a>
                 </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="/about">About</a>
+                </li>
               </ul>
               <div className="form-inline my-2 my-lg-0">
                 <span className="navbar-text text-dark">Welcome <strong>{this.props.username}</strong></span>
@@ -30,7 +33,9 @@ class Navbar extends React.Component {
             else return (
               <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-                  <li className="nav-item"></li>
+                <li className="nav-item">
+                  <a className="nav-link" href="/about">About</a>
+                </li>
                 </ul>
                 <div className="form-inline my-2 my-lg-0">
                   <a className="nav-link" href="/signup/">Signup</a>

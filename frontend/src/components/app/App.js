@@ -7,6 +7,7 @@ import Login from '../auth/Login'
 import Signup from '../auth/Signup'
 import SongsList from '../songs/SongsList'
 import SongCreateUpdate from '../songs/SongCreateUpdate'
+import AboutPage from './About';
 import './App.css';
 
 
@@ -24,6 +25,7 @@ class App extends React.Component {
               <Route exact path="/signup/" component={Signup}/>
               <Route path="/songs/:id" component={SongCreateUpdate} />
               <Route path="/songs/" exact component={SongCreateUpdate} />
+              <Route exact path="/about/" component={AboutPage}/>
             </Switch>
           </div>
         </div>
